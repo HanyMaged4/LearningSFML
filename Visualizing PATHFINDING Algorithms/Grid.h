@@ -62,7 +62,7 @@ public:
 		start = false;
 
 	}
-
+	 
 	//------------------draw functions------------------
 	void drawGrid(sf::RenderWindow& window)
 	{
@@ -70,12 +70,13 @@ public:
 			for (int j = 0; j < gridY; j++)
 				window.draw(grid[i][j]);
 	}
-	void buildRedSqr(sf::Vector2i ms_ps, sf::Vector2i& window)
+	
+	void addRedLine(sf::Vector2i ms_ps, sf::Vector2i ms_ps2, sf::Vector2i& window)
 	{
 		int gx = static_cast<int>(std::ceil((ms_ps.x - window.x - grid[0][0].getPosition().x) / 25.0) - 1);
 		int gy = static_cast<int>(std::ceil((ms_ps.y - window.y - grid[0][0].getPosition().y) / 25.0) - 2);
 		if (gy >= 0 && gy < this->gridY && gx >= 0 && gx < this->gridX)
-		{
+		{ 
 			if (gridState[gx][gy] != ' ') {
 				std::cout << "Grid state at position (" << gy << ", " << gx << "): " << gridState[gx][gy] << std::endl;
 			}
@@ -166,7 +167,6 @@ public:
 			{
 				int nx = xx + dx[i];
 				int ny = yy+ dy[i];
-				//std::cout << x<<" "<<y << std::endl;
 				if (nx >= 0 && nx < this->gridX && ny >= 0 && ny < this->gridY 
 					&& (gridState[nx][ny] == ' '|| gridState[nx][ny] == 'E'))
 				{
@@ -181,7 +181,6 @@ public:
 							this->grid[targetx][targety].setFillColor(sf::Color::Cyan);
 							this->drawGrid(window);
 							window.display();
-							//sf::sleep(sf::seconds(speed));
 							targetx = parent[targetx][targety].first;
 							targety = parent[targetx][targety].second;
 						}
@@ -196,7 +195,6 @@ public:
 					this->grid[nx][ny].setFillColor(sf::Color::Magenta);
 					this->drawGrid(window);
 					window.display();
-					//sf::sleep(sf::seconds(speed));
 					que.push({ nx,ny }); 
 
 				}
@@ -208,43 +206,43 @@ public:
 
 	bool helperDFS(int x, int y, sf::RenderWindow & window)
 	{
-		std::cout << x << " " << y << "\n";
-		if (S.first == -1 || S.second == -1 || E.first == -1 || E.second == -1)
-		{
-			std::cout << "Start or end does not exist yet\n";
-			return false;
-		}
+	//	std::cout << x << " " << y << "\n";
+	//	if (S.first == -1 || S.second == -1 || E.first == -1 || E.second == -1)
+	//	{
+	//		std::cout << "Start or end does not exist yet\n";
+	//		return false;
+	//	}
 
-		if ((x < 0 || x >= this->gridX) || (y < 0 || y >= this->gridY) || gridState[x][y] == 'R' || gridState[x][y] == 'V')
-			return false;
+	//	if ((x < 0 || x >= this->gridX) || (y < 0 || y >= this->gridY) || gridState[x][y] == 'R' || gridState[x][y] == 'V')
+	//		return false;
 
-		if (x == E.first && y == E.second) 
-		{
-			std::cout << "Found it :> " << std::endl;
-			return true;
-		}
-		gridState[x][y] = 'V';
-		this->drawGrid(window);
-		window.display();
-		//drawGrid(window);
-		sf::sleep(sf::seconds(speed));
-		this->grid[x][y].setFillColor(sf::Color::Green);
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx >= 0 && nx < this->gridX && ny >= 0 && ny < this->gridY && gridState[nx][ny] != 'V' && gridState[nx][ny] != 'R')
-			{
-				if (helperDFS(nx, ny, window))
-					return true;
-			}
-		}
-		return false;
-	}
-	void DFS(sf::RenderWindow& window) {
-		if (helperDFS(S.first, S.second, window))
-			std::cout << "we did it :)\n";
-		else
-			std::cout << " shit \n";
+	//	if (x == E.first && y == E.second) 
+	//	{
+	//		std::cout << "Found it :> " << std::endl;
+	//		return true;
+	//	}
+	//	gridState[x][y] = 'V';
+	//	this->drawGrid(window);
+	//	window.display();
+	//	//drawGrid(window);
+	//	sf::sleep(sf::seconds(speed));
+	//	this->grid[x][y].setFillColor(sf::Color::Green);
+	//	for (int i = 0; i < 4; i++) {
+	//		int nx = x + dx[i];
+	//		int ny = y + dy[i];
+	//		if (nx >= 0 && nx < this->gridX && ny >= 0 && ny < this->gridY && gridState[nx][ny] != 'V' && gridState[nx][ny] != 'R')
+	//		{
+	//			if (helperDFS(nx, ny, window))
+	//				return true;
+	//		}
+	//	}
+	//	return false;
+	//}
+	//void DFS(sf::RenderWindow& window) {
+	//	if (helperDFS(S.first, S.second, window))
+	//		std::cout << "we did it :)\n";
+	//	else
+	//		std::cout << " shit \n";
 	}
 };
 

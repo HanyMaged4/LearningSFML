@@ -22,7 +22,7 @@ void menu(sf::RenderWindow& window) {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-		
+			
 		}
 
 	}
@@ -38,11 +38,13 @@ int main()
 	Grid grid(gridX,gridY,sqr,sqrOuterLineThick);
 
 	//mouse location variables
-	sf::Vector2i ms_lc;
+	sf::Vector2i ms_lc1;
 	//change the state using keybaord
-	bool red = 1, dir = 0 , deletefunc = 0, dfs=false;
+	bool red = 1, dir = 0, deletefunc = 0;// , dfs = false;
 	while (window.isOpen())
 	{
+		sf::Vector2i ms_lc2;
+		sf::Vector2i windowpos = window.getPosition();
 		//------------------events handrling ------------------
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -66,42 +68,41 @@ int main()
 		// ------------------UPDATE------------------
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 		{
-			ms_lc = sf::Mouse::getPosition();
-			 if (mouseInWindow(ms_lc, window)) {
-						
-				 if (dir)
-				 {
-					 sf::Vector2i windowpos = window.getPosition();
-					 grid.StartOrEnd(ms_lc, windowpos);
-				 }
-				 else if(red)
-				 {
-					 sf::Vector2i windowpos = window.getPosition();
-					 grid.buildRedSqr(ms_lc, windowpos);
-				 }
+			ms_lc1 = sf::Mouse::getPosition();
+			 if (mouseInWindow(ms_lc1, window)) 
+			 {			
+				if (dir)
+					 grid.StartOrEnd(ms_lc1, windowpos);
+				 
+				else if (red)
+				{
+					//grid.addRedPoint(ms_lc1, windowpos);
+					grid.addRedLine(ms_lc1,ms_lc2,windowpos);
+				}
+					
 				 else if (deletefunc)
-				 {
-					 sf::Vector2i windowpos = window.getPosition();
-					 grid.delet(ms_lc, windowpos);
-				 }
+					 grid.delet(ms_lc1, windowpos);
+				 
 			 }
 		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) 
-		{
-			std::cout << "START DFS\n";
-			grid.DFS(window);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) 
 		{
 			std::cout << "START BFS\n";
 			grid.BFS(window);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) 
 		{
 			std::cout << "reset grid\n";
 			grid.resetGrid();
 		}
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) 
+		//{
+		//	std::cout << "START DFS\n";
+		//	grid.DFS(window);
+		//}
 		//------------------ DISPLAY------------------
+	
 		window.clear(sf::Color::White);		
 		grid.drawGrid(window);
 		window.display();
